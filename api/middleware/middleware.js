@@ -18,7 +18,7 @@ async function checkUsernameFree(req, res, next) {
     }
 }
 
-const checkUsernameExists = async (req, res, next) => {
+async function checkUsernameExists (req, res, next) {
     try {
         const username = await db('users').where('username', req.body.username).first()
                if (username) {
@@ -35,7 +35,18 @@ const checkUsernameExists = async (req, res, next) => {
             }
 }
 
-const checkCredentials = (req, res, next) => {
+async function checkCredentials (req, res, next) {
+    const { username, password } = req.body
+        try {
+            if (!username || !password) {
+                next({
+                    status: 401,
+                    message: 'username and password required'
+                })
+            }
+        } catch (err) {
+            next(err)
+        }
 
 }
 
