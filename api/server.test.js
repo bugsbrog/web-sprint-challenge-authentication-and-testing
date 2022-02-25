@@ -39,3 +39,21 @@ describe('jokes-router', () => {
     })
   })
 })
+
+describe('auth-router', () => {
+
+  describe('[POST] /api/auth/register', () => {
+    it('returns error message if username is not in req.body', async () => {
+      const res = await request(server)
+          .post('/api/auth/register')
+          .send({ username: "", password: "1234" })
+      expect(res.body.message).toBe( 'username and password required' )
+    })
+    it('returns error message if password is not in req.body', async () => {
+      const res = await request(server)
+          .post('/api/auth/register')
+          .send({ username: "Hannah", password: "" })
+      expect(res.body.message).toBe('username and password required')
+    })
+  })
+})
