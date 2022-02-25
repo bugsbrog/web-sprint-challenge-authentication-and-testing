@@ -4,9 +4,9 @@ function findBy(filter) {
     return db('users').where(filter)
 }
 
-function findById(user_id) {
+function findById(id) {
     return db('users')
-        .where('user_id', user_id)
+        .where('id', id)
         .first()
 }
 
