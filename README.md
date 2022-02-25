@@ -30,7 +30,7 @@ Your finished project must include all the following requirements (further instr
 
 - [X] An authentication workflow with functionality for account creation and login, implemented inside `api/auth/auth-router.js`.
 - [X] Middleware used to restrict access to resources from non-authenticated requests, implemented inside `api/middleware/restricted.js`.
-- [ ] A minimum of 2 tests per API endpoint, written inside `api/server.test.js`.
+- [X] A minimum of 2 tests per API endpoint, written inside `api/server.test.js`.
 
 **IMPORTANT Notes:**
 
@@ -54,6 +54,44 @@ Your finished project must include all the following requirements (further instr
 Be prepared to demonstrate your understanding of this week's concepts by answering questions on the following topics.
 
 1. Differences between using _sessions_ or _JSON Web Tokens_ for authentication.
+
+Sessions provide a way to persist data across requests. When using sessions, each client will have a unique session stored on the server.
+
+The basic workflow when using a combination of cookies and sessions for authentication is:
+
+Client sends credentials
+Server verifies credentials
+Server creates a session for the client
+Server produces and sends back a cookie
+Client stores the cookie
+Client sends the cookie on every request
+Server verifies that the cookie is valid
+Server provides access to resource
+
+JSON Web Tokens (JWT) are a way to transmit information between parties in the form of a JSON object. The JSON information is most commonly used for authentication and information exchange.
+
+Ultimately, a JWT is a string that has three parts separated by a period (.). Those are:
+
+-The header
+-The payload
+-The signature
+
 2. What does `bcryptjs` do to help us store passwords in a secure manner?
+
+Bcryptjs features include:
+
+-Password hashing function
+-Implements salting both manually and automatically.
+-Accumulative hashing rounds
+
+Having an algorithm that hashes the information multiple times (rounds) means an attacker needs to have the hash, know the algorithm used, and how many rounds were used to generate the hash in the first place.
+
 3. How are unit tests different from integration and end-to-end testing?
+
+The tests we write for endpoints are called integration tests because they test how different parts of the system work together. 
+
+This is different from the unit tests we use to verify the correctness of one part of the system in isolation.
+
 4. How does _Test Driven Development_ change the way we write applications and tests?
+
+Test driven development is the process of writing tests before code. In theory, you can write much higher quality code when you start with the end (the tests) in mind. You might be familiar with similar philosophies in teaching (backward planning) -- or from the famous book "7 Habits of Highly Effective People" (starting with the end in mind).
