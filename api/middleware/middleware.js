@@ -1,15 +1,16 @@
 const Auth = require("../auth/auth-model");
 
-const checkUsernameFree = async (req, res, next) => {
+const checkUsernameExists = async (req, res, next) => {
     const { username } = req.body
         try {
-            const [user] = await Auth.findBy({ username })
-                if (user) {
+            const [user] = await Auth.findById({ username })
+                if (!user) {
                     next({
-                        status: 422,
-                        message: 'username taken'
+                       status: 401,
+                       message: 'invalid credentials'
                     })
                 } else {
+                    req.user = user
                     next()
                 }
             } catch (err) {
@@ -17,16 +18,11 @@ const checkUsernameFree = async (req, res, next) => {
             }
 }
 
-const checkUsernameExists = async (req, res, next) => {
-
-}
-
 const checkCredentials = (req, res, next) => {
 
 }
 
 module.exports = {
-    checkUsernameFree,
     checkUsernameExists,
     checkCredentials
 }
