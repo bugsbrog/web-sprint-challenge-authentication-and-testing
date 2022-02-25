@@ -10,7 +10,7 @@ const makeToken = require('./auth-token-builder')
 const Users = require('./auth-model')
 const { BCRYPT_ROUNDS } = require('../secrets/index')
 
-router.post('/register', checkUsernameFree, checkCredentials, async (req, res, next) => {
+router.post('/register', checkCredentials, checkUsernameFree, async (req, res, next) => {
   const { username, password } = req.body
     try {
       const hash = bcrypt.hashSync(password, BCRYPT_ROUNDS)
@@ -21,7 +21,7 @@ router.post('/register', checkUsernameFree, checkCredentials, async (req, res, n
     }
 });
 
-router.post('/login', checkUsernameExists, checkCredentials, (req, res, next) => {
+router.post('/login', checkCredentials, checkUsernameExists, (req, res, next) => {
     let { password } = req.body
 
     if (bcrypt.compareSync(password, req.user.password)) {
