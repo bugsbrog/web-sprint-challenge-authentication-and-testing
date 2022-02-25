@@ -28,10 +28,10 @@ describe('jokes-router', () => {
     beforeEach(async () => {
       res = await request(server).get('/api/jokes')
     })
-    it('should return JSON', () => {
+    it('returns JSON', () => {
       expect(res.type).toBe('application/json')
     })
-    it('returns a 401 error because no token', async () => {
+    it('returns a status code 401 because no token', async () => {
       expect(res.status).toBe(401)
     })
     it('returns error message for 401 error', () => {
@@ -46,14 +46,28 @@ describe('auth-router', () => {
     it('returns error message if username is not in req.body', async () => {
       const res = await request(server)
           .post('/api/auth/register')
-          .send({ username: "", password: "1234" })
-      expect(res.body.message).toBe( 'username and password required' )
+          .send({username: "", password: "1234"})
+      expect(res.body.message).toBe('username and password required')
     })
     it('returns error message if password is not in req.body', async () => {
       const res = await request(server)
           .post('/api/auth/register')
-          .send({ username: "Hannah", password: "" })
+          .send({username: "Hannah", password: ""})
       expect(res.body.message).toBe('username and password required')
+    })
+  })
+  describe('POST /login', () => {
+    test('returns status code 401 if user is not in db', async () => {
+      const res = await request(server)
+          .post('/api/auth/login')
+          .send({ username: "randomUser", password: "1234" })
+      expect(res.status).toBe(401)
+    })
+    it('returns error message if user is not in db', async () => {
+      const res = await request(server)
+          .post('/api/auth/login')
+          .send({ username: "randomUser", password: "1234" })
+      expect(res.body.message).toBe('invalid credentials')
     })
   })
 })
