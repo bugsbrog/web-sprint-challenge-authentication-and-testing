@@ -1,14 +1,19 @@
 const router = require('express').Router();
+const {
+    checkUsernameFree,
+    checkUsernameExists,
+} = require('../middleware/middleware')
 const bcrypt = require('bcryptjs')
-const User = require('./auth-model')
-const { BCRYPT_ROUNDS } = require('../secrets/index')
 const makeToken = require('./auth-token-builder')
 
-router.post('/register', async (req, res, next) => {
+const Users = require('./auth-model')
+const { BCRYPT_ROUNDS } = require('../secrets/index')
+
+router.post('/register', checkUsernameFree, async (req, res, next) => {
   const { username, password } = req.body
     try {
       const hash = bcrypt.hashSync(password, BCRYPT_ROUNDS)
-      const newUser = await User.add({ username, password: hash })
+      const newUser = await Users.add({ username, password: hash })
       res.status(201).json(newUser)
     } catch (err) {
         next(err)
@@ -40,21 +45,21 @@ router.post('/register', async (req, res, next) => {
   */
 });
 
-router.post('/login', (req, res, next) => {
-  const { password } = req.body
-     if (bcrypt.compareSync(password, req.user.password)) {
-       const token = makeToken(req.user)
-       res.json({
-         message: `welcome ${req.user.username}`,
-         token
-       })
-     } else {
-        next({
-          status: 401,
-          message: 'invalid credentials'
+router.post('/login', checkUsernameExists, (req, res, next) => {
+    let { password } = req.body
+
+    if (bcrypt.compareSync(password, req.user.password)) {
+        const token = makeToken(req.user)
+        res.json({
+            message: `welcome, ${req.user.username}`, token
         })
-     }
-  /*
+    } else {
+        next({
+            status: 401,
+            message: 'invalid credentials'
+        })
+    }
+    /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
 

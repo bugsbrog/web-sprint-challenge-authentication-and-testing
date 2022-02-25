@@ -1,4 +1,5 @@
 const User = require("../auth/auth-model");
+const db = require('../../data/dbConfig')
 
 async function checkUsernameFree(req, res, next) {
     const { username } = req.body
@@ -18,17 +19,16 @@ async function checkUsernameFree(req, res, next) {
 }
 
 const checkUsernameExists = async (req, res, next) => {
-    const { username } = req.body
-        try {
-            const [user] = await User.findById({ username })
-                if (!user) {
+    try {
+        const username = await db('users').where('username', req.body.username).first()
+               if (username) {
+                   req.user = username
+                    next()
+                } else {
                     next({
                        status: 401,
                        message: 'invalid credentials'
                     })
-                } else {
-                    req.user = user
-                    next()
                 }
             } catch (err) {
                 next(err)
