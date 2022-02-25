@@ -26,7 +26,7 @@ We will hash the user's password using `bcryptjs`, and use JSON Web Tokens and t
 
 ### MVP
 
-Your finished project must include all of the following requirements (further instructions are found inside each file):
+Your finished project must include all the following requirements (further instructions are found inside each file):
 
 - [ ] An authentication workflow with functionality for account creation and login, implemented inside `api/auth/auth-router.js`.
 - [ ] Middleware used to restrict access to resources from non-authenticated requests, implemented inside `api/middleware/restricted.js`.
