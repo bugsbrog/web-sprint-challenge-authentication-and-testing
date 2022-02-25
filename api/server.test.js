@@ -21,3 +21,21 @@ afterAll(async () => {
   await db.destroy()
 })
 
+describe('jokes-router', () => {
+
+  describe('[GET] /api/jokes', () => {
+    let res
+    beforeEach(async () => {
+      res = await request(server).get('/api/jokes')
+    })
+    it('should return JSON', () => {
+      expect(res.type).toBe('application/json')
+    })
+    it('returns a 401 error because no token', async () => {
+      expect(res.status).toBe(401)
+    })
+    it('returns error message for 401 error', () => {
+      expect(res.body.message).toEqual('token required')
+    })
+  })
+})
